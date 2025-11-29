@@ -83,6 +83,11 @@ with st.spinner("Fetching latest data from World Bank..."):
             # Filter data for selected year
             year_df = df[df['year'] == selected_year]
             
+            # Show data stats in sidebar
+            st.sidebar.markdown("---")
+            st.sidebar.metric("Countries with Data", len(year_df))
+            st.sidebar.metric("Global Avg CO₂", f"{year_df['co2_per_capita'].mean():.2f} t" if not year_df.empty else "N/A")
+            
             # --- Visualizations ---
             
             # 1. Global Map
@@ -111,7 +116,7 @@ with st.spinner("Fetching latest data from World Bank..."):
                     projection_type="natural earth"
                 )
             )
-            st.plotly_chart(fig_map, use_container_width=True)
+            st.plotly_chart(fig_map, use_container_width=True, key=f"map_{selected_year}")
             
             # 2. Top Emitters Bar Chart
             st.subheader(f"Top 10 Emitters per Capita ({selected_year})")
@@ -134,7 +139,7 @@ with st.spinner("Fetching latest data from World Bank..."):
                 paper_bgcolor="rgba(0,0,0,0)",
                 yaxis={'categoryorder':'total ascending'}
             )
-            st.plotly_chart(fig_bar, use_container_width=True)
+            st.plotly_chart(fig_bar, use_container_width=True, key=f"bar_{selected_year}")
         
         # Footer
         st.markdown("---")
