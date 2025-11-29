@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import wbgapi as wb
+import requests
 
 # Page Configuration
 st.set_page_config(
@@ -13,30 +13,49 @@ st.set_page_config(
 @st.cache_data
 def fetch_co2_data():
     """
-    Fetches CO2 emissions (metric tons per capita) for all countries.
+    Fetches CO2 emissions data directly from World Bank API.
     Indicator: EN.ATM.CO2E.PC
     """
-    # Fetch data for all countries, excluding aggregates
-    data = wb.data.DataFrame('EN.ATM.CO2E.PC', labels=True)
+    # API Endpoint
+    url = "http://api.worldbank.org/v2/country/all/indicator/EN.ATM.CO2E.PC"
     
-    # The dataframe comes in wide format (years as columns). 
-    # Let's reset index to get Country Code and Name
-    data = data.reset_index()
+    # Parameters
+    params = {
+        "format": "json",
+        "per_page": 20000, # Try to get everything in one go (max is usually 20k or so)
+        "source": 2 # WDI
+    }
     
-    # Melt to long format for easier plotting
-    # Columns are like 'YR1990', 'YR1991', etc.
-    id_vars = ['economy', 'Country']
-    value_vars = [c for c in data.columns if c.startswith('YR')]
+    response = requests.get(url, params=params)
+    data = response.json()
     
-    df_long = data.melt(id_vars=id_vars, value_vars=value_vars, var_name='year_col', value_name='co2_per_capita')
+    # The API returns a list: [metadata, data]
+    if len(data) < 2:
+        raise ValueError("Invalid API response")
+        
+    records = data[1]
     
-    # Clean up year column (remove 'YR')
-    df_long['year'] = df_long['year_col'].str.replace('YR', '').astype(int)
+    # Create DataFrame
+    df = pd.DataFrame(records)
+    
+    # Extract country name from the 'country' dict column
+    df['Country'] = df['country'].apply(lambda x: x['value'])
+    df['economy'] = df['country'].apply(lambda x: x['id'])
+    
+    # Rename and clean
+    df = df.rename(columns={'value': 'co2_per_capita', 'date': 'year'})
+    df['year'] = df['year'].astype(int)
     
     # Drop rows with missing values
-    df_long = df_long.dropna(subset=['co2_per_capita'])
+    df = df.dropna(subset=['co2_per_capita'])
     
-    return df_long
+    # Filter out aggregates (World, Regions, etc.) if possible
+    # The API returns aggregates too. Usually they have 'iso2' codes like '1W', 'Z4' etc.
+    # But 'economy' here is iso3. 
+    # A simple way to filter is to check if 'economy' is a valid country code.
+    # For now, we'll keep it simple, or we can filter by a known list if needed.
+    
+    return df[['economy', 'Country', 'year', 'co2_per_capita']]
 
 # --- Main Layout ---
 st.title("Global Carbon Emissions Tracker")
