@@ -121,7 +121,7 @@ with st.spinner("Fetching latest data from World Bank..."):
             y="Country",
             orientation='h',
             color="co2_per_capita",
-            color_continuous_scale="RdYlOr",
+            color_continuous_scale="YlOrRd",
             labels={"co2_per_capita": "CO₂ (metric tons/capita)"}
         )
         
