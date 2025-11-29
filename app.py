@@ -22,10 +22,46 @@ def fetch_co2_data():
     # Parameters
     params = {
         "format": "json",
-        "per_page": 20000, # Try to get everything in one go (max is usually 20k or so)
+        "per_page": 20000,
         "source": 75 # ESG Data
     }
     
+    response = requests.get(url, params=params)
+    data = response.json()
+    
+    # The API returns a list: [metadata, data]
+    if len(data) < 2:
+        raise ValueError("Invalid API response")
+        
+    records = data[1]
+    
+    if not records:
+        return pd.DataFrame(columns=['economy', 'Country', 'year', 'co2_per_capita'])
+
+    # Create DataFrame
+    df = pd.DataFrame(records)
+    
+    # Check if expected columns exist
+    if 'country' not in df.columns or 'value' not in df.columns or 'countryiso3code' not in df.columns:
+        return pd.DataFrame(columns=['economy', 'Country', 'year', 'co2_per_capita'])
+
+    # Extract country name and ISO3 code
+    df['Country'] = df['country'].apply(lambda x: x['value'] if isinstance(x, dict) else '')
+    df['economy'] = df['countryiso3code']  # Use the ISO3 code field directly
+    
+    # Rename and clean
+    df = df.rename(columns={'value': 'co2_per_capita', 'date': 'year'})
+    df['year'] = df['year'].astype(int)
+    
+    # Drop rows with missing values or empty ISO codes
+    df = df.dropna(subset=['co2_per_capita'])
+    df = df[df['economy'].notna() & (df['economy'] != '')]
+    
+    if df.empty:
+        return pd.DataFrame(columns=['economy', 'Country', 'year', 'co2_per_capita'])
+    
+    return df[['economy', 'Country', 'year', 'co2_per_capita']]
+
 # --- Main Layout ---
 st.title("Global Carbon Emissions Tracker")
 st.markdown("""
