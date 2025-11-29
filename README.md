@@ -14,7 +14,7 @@ Interactive global map visualizing CO₂ emissions per capita using World Bank d
 - **Python 3.8+**
 - **Streamlit**: Interactive web framework
 - **Plotly**: Geospatial visualizations
-- **WBGAPI**: World Bank Data API wrapper for Python
+- **Requests**: API data fetching
 - **Pandas**: Data manipulation
 
 ## Running Locally
