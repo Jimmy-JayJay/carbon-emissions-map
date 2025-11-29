@@ -96,6 +96,7 @@ with st.spinner("Fetching latest data from World Bank..."):
             fig_map = px.choropleth(
                 year_df,
                 locations="economy",
+                locationmode="ISO-3",  # Specify that we're using ISO3 country codes
                 color="co2_per_capita",
                 hover_name="Country",
                 color_continuous_scale="YlOrRd", # Red-Yellow-Orange (Red = High)
