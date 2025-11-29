@@ -143,7 +143,7 @@ with st.spinner("Fetching latest data from World Bank..."):
         
         # Footer
         st.markdown("---")
-        st.caption("Built by [Jimmy Matewere](https://github.com/Jimmy-JayJay) | Data: World Bank (Indicator EN.ATM.CO2E.PC)")
+        st.caption("Built by [Jimmy Matewere](https://github.com/Jimmy-JayJay) | Data: [World Bank ESG Data](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC) (Indicator EN.ATM.CO2E.PC)")
         
     except Exception as e:
         st.error(f"Error loading data: {e}")
