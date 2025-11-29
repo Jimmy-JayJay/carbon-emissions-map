@@ -90,7 +90,7 @@ with st.spinner("Fetching latest data from World Bank..."):
             locations="economy",
             color="co2_per_capita",
             hover_name="Country",
-            color_continuous_scale="RdYlOr", # Red-Yellow-Orange (Red = High)
+            color_continuous_scale="YlOrRd", # Red-Yellow-Orange (Red = High)
             range_color=[0, 20], # Cap at 20 to see variation better (some outliers like Qatar are very high)
             labels={"co2_per_capita": "CO₂ (metric tons/capita)"},
             title=f"CO₂ Emissions per Capita in {selected_year}"
