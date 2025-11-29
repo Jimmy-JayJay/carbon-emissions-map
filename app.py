@@ -23,7 +23,7 @@ def fetch_co2_data():
     params = {
         "format": "json",
         "per_page": 20000, # Try to get everything in one go (max is usually 20k or so)
-        "source": 2 # WDI
+        "source": 75 # ESG Data
     }
     
     response = requests.get(url, params=params)
