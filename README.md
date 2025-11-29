@@ -1,13 +1,13 @@
-# Global Carbon Emissions Tracker 🌍
+# Global Carbon Emissions Tracker
 
-Interactive global map visualizing CO₂ emissions per capita using World Bank data. Built with Python and Streamlit to track environmental impact trends from 1990 to present, highlighting disparities in global carbon footprints.
+Interactive visualization of global CO₂ emissions per capita using Streamlit and Plotly.
 
 ## Features
 
-- **Interactive Choropleth Map**: Visualizes CO₂ emissions per capita (metric tons) for every country.
-- **Time Slider**: Explore how emissions have changed over the last 30+ years.
-- **Top Emitters Ranking**: Identifies countries with the highest per-capita carbon footprints.
-- **Live Data**: Fetches the latest available data directly from the World Bank API.
+- **Interactive World Map**: Choropleth visualization showing emissions by country
+- **Year Selection**: Explore emissions data from 1990-2020
+- **Top Emitters Chart**: Bar chart of the top 10 emitting countries per capita
+- **Real-time Data**: Fetches latest data from World Bank ESG indicators
 
 ## Tech Stack
 
@@ -19,21 +19,20 @@ Interactive global map visualizing CO₂ emissions per capita using World Bank d
 
 ## Running Locally
 
-1.  **Install Dependencies**:
+```bash
+# Install dependencies
+pip install -r requirements.txt
 
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-2.  **Run the App**:
-    ```bash
-    streamlit run app.py
-    ```
+# Run the app
+streamlit run app.py
+```
 
 ## Data Source
 
-Data is sourced from the [World Bank Open Data](https://data.worldbank.org/) portal, specifically indicator `EN.ATM.CO2E.PC` (CO2 emissions, metric tons per capita).
+CO₂ emissions data from [World Bank ESG Data](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC) (Indicator: EN.ATM.CO2E.PC)
 
 ## Author
 
-Built by [Jimmy Matewere](https://github.com/Jimmy-JayJay) - Climate Scientist & Data Analyst
+Built by [Jimmy Matewere](https://github.com/Jimmy-JayJay)
+
+- Climate Scientist & Data Analyst
