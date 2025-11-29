@@ -26,37 +26,6 @@ def fetch_co2_data():
         "source": 75 # ESG Data
     }
     
-    response = requests.get(url, params=params)
-    data = response.json()
-    
-    # The API returns a list: [metadata, data]
-    if len(data) < 2:
-        raise ValueError("Invalid API response")
-        
-    records = data[1]
-    
-    # Create DataFrame
-    df = pd.DataFrame(records)
-    
-    # Extract country name from the 'country' dict column
-    df['Country'] = df['country'].apply(lambda x: x['value'])
-    df['economy'] = df['country'].apply(lambda x: x['id'])
-    
-    # Rename and clean
-    df = df.rename(columns={'value': 'co2_per_capita', 'date': 'year'})
-    df['year'] = df['year'].astype(int)
-    
-    # Drop rows with missing values
-    df = df.dropna(subset=['co2_per_capita'])
-    
-    # Filter out aggregates (World, Regions, etc.) if possible
-    # The API returns aggregates too. Usually they have 'iso2' codes like '1W', 'Z4' etc.
-    # But 'economy' here is iso3. 
-    # A simple way to filter is to check if 'economy' is a valid country code.
-    # For now, we'll keep it simple, or we can filter by a known list if needed.
-    
-    return df[['economy', 'Country', 'year', 'co2_per_capita']]
-
 # --- Main Layout ---
 st.title("Global Carbon Emissions Tracker")
 st.markdown("""
