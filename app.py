@@ -130,85 +130,91 @@ with st.spinner("Loading data..."):
         col1.metric("Countries", len(year_df))
         col2.metric("Global Avg", f"{year_df['co2_per_capita'].mean():.2f} t" if not year_df.empty else "N/A")
         
-        # Layout: Map (Left) and Top 10 (Right)
-        col_map, col_chart = st.columns([3, 1])
+        # Layout: Map (Top) and Top 10 (Bottom)
         
-        with col_map:
-            st.subheader(f"Global Map ({selected_year})")
-            
-            fig_map = px.choropleth(
-                year_df,
-                locations="economy",
-                locationmode="ISO-3",
-                color="co2_per_capita",
-                hover_name="Country",
-                color_continuous_scale="Portland",
-                range_color=[0, 20],
-                labels={"co2_per_capita": "CO₂ (t/capita)"}
+        # Global Map
+        st.subheader(f"Global Map ({selected_year})")
+        
+        fig_map = px.choropleth(
+            year_df,
+            locations="economy",
+            locationmode="ISO-3",
+            color="co2_per_capita",
+            hover_name="Country",
+            color_continuous_scale="Portland",
+            range_color=[0, 20],
+            labels={"co2_per_capita": "CO₂ (t/capita)"}
+        )
+        
+        fig_map.update_layout(
+            template="plotly_dark",
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin={"r":0,"t":0,"l":0,"b":0},
+            geo=dict(
+                bgcolor="rgba(0,0,0,0)",
+                showlakes=False,
+                showframe=False,
+                projection_type="natural earth",
+                coastlinecolor="rgba(100, 255, 218, 0.1)",
+                landcolor="rgba(100, 255, 218, 0.02)"
+            ),
+            font=dict(family="Inter, sans-serif", color="#e6f1ff"),
+            coloraxis_colorbar=dict(
+                title="t/capita",
+                thickness=15,
+                len=0.6,
+                tickfont=dict(color="#8892b0")
             )
-            
-            fig_map.update_layout(
-                template="plotly_dark",
-                plot_bgcolor="rgba(0,0,0,0)",
-                paper_bgcolor="rgba(0,0,0,0)",
-                margin={"r":0,"t":0,"l":0,"b":0},
-                geo=dict(
-                    bgcolor="rgba(0,0,0,0)",
-                    showlakes=False,
-                    showframe=False,
-                    projection_type="natural earth",
-                    coastlinecolor="rgba(100, 255, 218, 0.1)",
-                    landcolor="rgba(100, 255, 218, 0.02)"
-                ),
-                font=dict(family="Inter, sans-serif", color="#e6f1ff"),
-                coloraxis_colorbar=dict(
-                    title="t/capita",
-                    thickness=15,
-                    len=0.6,
-                    tickfont=dict(color="#8892b0")
-                )
-            )
-            st.plotly_chart(fig_map, use_container_width=True)
-            
-        with col_chart:
-            st.subheader("Top Emitters")
-            
-            top_10 = year_df.sort_values('co2_per_capita', ascending=False).head(10)
-            
-            fig_bar = px.bar(
-                top_10,
-                x="co2_per_capita",
-                y="Country",
-                orientation='h',
-                color="co2_per_capita",
-                color_continuous_scale="Portland",
-                range_color=[0, 20],
-                text="co2_per_capita"
-            )
-            
-            fig_bar.update_traces(
-                texttemplate='%{text:.1f}',
-                textposition='outside',
-                textfont=dict(color="#8892b0", size=11)
-            )
-            
-            fig_bar.update_layout(
-                template="plotly_dark",
-                plot_bgcolor="rgba(0,0,0,0)",
-                paper_bgcolor="rgba(0,0,0,0)",
-                margin={"r":50,"t":0,"l":0,"b":0},
-                xaxis=dict(
-                    showgrid=True, 
-                    gridcolor="rgba(100, 255, 218, 0.05)", 
-                    showticklabels=False,
-                    range=[0, top_10['co2_per_capita'].max() * 1.15]
-                ),
-                yaxis=dict(categoryorder='total ascending', tickfont=dict(color="#e6f1ff", size=11)),
-                font=dict(family="Inter, sans-serif", color="#e6f1ff"),
-                showlegend=False,
-                coloraxis_showscale=False
-            )
-            st.plotly_chart(fig_bar, use_container_width=True)
+        )
+        st.plotly_chart(fig_map, use_container_width=True)
+        
+        st.markdown("---")
+        
+        # Top Emitters Bar Chart
+        st.subheader("Top Emitters")
+        
+        top_10 = year_df.sort_values('co2_per_capita', ascending=False).head(10)
+        
+        fig_bar = px.bar(
+            top_10,
+            x="Country",
+            y="co2_per_capita",
+            orientation='v',
+            color="co2_per_capita",
+            color_continuous_scale="Portland",
+            range_color=[0, 20],
+            text="co2_per_capita"
+        )
+        
+        fig_bar.update_traces(
+            texttemplate='%{text:.1f}',
+            textposition='outside',
+            textfont=dict(color="#8892b0", size=11)
+        )
+        
+        fig_bar.update_layout(
+            template="plotly_dark",
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin={"r":0,"t":20,"l":0,"b":0},
+            yaxis=dict(
+                showgrid=True, 
+                gridcolor="rgba(100, 255, 218, 0.05)", 
+                showticklabels=True,
+                title=None,
+                range=[0, top_10['co2_per_capita'].max() * 1.15]
+            ),
+            xaxis=dict(
+                categoryorder='total descending', 
+                tickfont=dict(color="#e6f1ff", size=11),
+                title=None
+            ),
+            font=dict(family="Inter, sans-serif", color="#e6f1ff"),
+            showlegend=False,
+            coloraxis_showscale=False
+        )
+        st.plotly_chart(fig_bar, use_container_width=True)
 
         st.markdown("---")
         st.markdown(
