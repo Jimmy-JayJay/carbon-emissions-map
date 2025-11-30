@@ -97,8 +97,8 @@ def fetch_co2_data():
         return pd.DataFrame()
 
 # Header
-st.title("Global Carbon Emissions Tracker")
-st.markdown("Interactive visualization of **CO₂ emissions per capita** (metric tons). Data: [World Bank](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC).")
+st.title("Global Carbon Emissions ")
+st.markdown("Visualization of **CO₂ emissions per capita** (metric tons). Data: [World Bank](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC).")
 
 # Main App Logic
 with st.spinner("Loading data..."):
