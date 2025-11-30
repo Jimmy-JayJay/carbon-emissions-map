@@ -10,28 +10,23 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for Dark/Glassmorphic Theme
 st.markdown("""
     <style>
-        /* Main Background */
         .stApp {
             background-color: #0a192f;
             color: #e6f1ff;
         }
         
-        /* Sidebar */
         [data-testid="stSidebar"] {
             background-color: rgba(17, 34, 64, 0.8);
             border-right: 1px solid rgba(100, 255, 218, 0.1);
         }
         
-        /* Typography */
         h1, h2, h3, h4, h5, h6, p, label, .stMarkdown {
             color: #e6f1ff !important;
             font-family: 'Inter', sans-serif;
         }
         
-        /* Metrics */
         [data-testid="stMetricValue"] {
             color: #64ffda !important;
         }
@@ -39,12 +34,10 @@ st.markdown("""
             color: #8892b0 !important;
         }
         
-        /* Slider */
         .stSlider [data-baseweb="slider"] {
             color: #64ffda;
         }
         
-        /* Links */
         a {
             color: #64ffda !important;
             text-decoration: none;
@@ -53,7 +46,6 @@ st.markdown("""
             text-decoration: underline;
         }
         
-        /* Containers/Cards (Simulated with CSS) */
         .css-1r6slb0 {
             background: rgba(17, 34, 64, 0.6);
             border-radius: 12px;
