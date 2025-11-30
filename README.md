@@ -33,6 +33,5 @@ CO₂ emissions data from [World Bank ESG Data](https://data.worldbank.org/indic
 
 ## Author
 
-Built by [Jimmy Matewere](https://github.com/Jimmy-JayJay)
-
+[Jimmy Matewere](https://github.com/Jimmy-JayJay)
 - Climate Scientist & Data Analyst
